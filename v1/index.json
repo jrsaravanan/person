@@ -1,0 +1,29 @@
+{
+    "apiVersion": "",
+    "swaggerVersion": "1.2",
+    "basePath": "{{.}}",
+    "resourcePath": "/v1",
+    "apis": [
+        {
+            "path": "/v1/auth/ping",
+            "description": "ping auth service",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "Ping",
+                    "type": "string",
+                    "items": {},
+                    "summary": "ping auth service",
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "",
+                            "responseType": "string",
+                            "responseModel": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
