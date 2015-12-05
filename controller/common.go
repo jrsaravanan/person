@@ -3,7 +3,7 @@
 package controller
 
 import (
-	"auth/log"
+	. "auth/log"
 	"net/http"
 	"time"
 )
@@ -34,6 +34,6 @@ func WithLogging(w http.ResponseWriter, r *http.Request,
 	startTime := time.Now()
 	executeFunc(w, r)
 	endTime := time.Now()
-	log.Logger.Debug("ElapsedTime in seconds:", endTime.Sub(startTime))
+	Logger.Debug("ElapsedTime in seconds:", endTime.Sub(startTime))
 
 }

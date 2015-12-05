@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"auth/api"
-	"auth/log"
+	. "auth/log"
 
 	"github.com/gorilla/context"
 	"github.com/rs/cors"
@@ -41,7 +41,7 @@ func main() {
 	iniflags.Parse()
 
 	globalMux.Handle("/v1/auth/", api.BuildRouter())
-	log.Logger.Info("Authentication Server listening on port - ", httpPort)
+	Logger.Info("Authentication Server listening on port - ", httpPort)
 
 	//to handle CORS support
 	//Angular JS may use OPTION for PUT request , it is handled by CORS
@@ -52,16 +52,16 @@ func main() {
 		AllowedHeaders:   []string{"*"},
 	})
 	corsHandler := c.Handler(globalMux)
-	//responseHandler := preJSONProcessor(corsHandler)
+	responseHandler := preJSONProcessor(corsHandler)
 
 	//start server
 	s := &http.Server{
 		Addr:           ":" + httpPort,
-		Handler:        context.ClearHandler(corsHandler),
+		Handler:        context.ClearHandler(responseHandler),
 		ReadTimeout:    30 * time.Second,
 		WriteTimeout:   30 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	log.Logger.Fatal(s.ListenAndServe())
+	Logger.Fatal(s.ListenAndServe())
 
 }
