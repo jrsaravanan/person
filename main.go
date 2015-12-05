@@ -7,49 +7,15 @@ package main
 import (
 	"flag"
 	"net/http"
-	"strings"
 	"time"
 
+	"auth/api"
 	"auth/log"
 
 	"github.com/gorilla/context"
-	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/vharitonsky/iniflags"
 )
-
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	isJsonRequest := false
-	w.Header().Set("Content-Type", "text/html")
-
-	if acceptHeaders, ok := r.Header["Accept"]; ok {
-		for _, acceptHeader := range acceptHeaders {
-			if strings.Contains(acceptHeader, "json") {
-				isJsonRequest = true
-				break
-			}
-		}
-	}
-
-	if isJsonRequest {
-		w.Write([]byte(resourceListingJson))
-	} else {
-		http.Redirect(w, r, "/swagger-ui/", http.StatusFound)
-	}
-
-}
-
-func ApiDescriptionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	apiKey := strings.Trim(r.RequestURI, "/")
-
-	if json, ok := apiDescriptionsJson[apiKey]; ok {
-		w.Write([]byte(json))
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-	}
-
-}
 
 //postJSONProcessor add http header for all response
 func preJSONProcessor(next http.Handler) http.Handler {
@@ -64,9 +30,8 @@ func preJSONProcessor(next http.Handler) http.Handler {
 func main() {
 
 	var (
-		httpPort      string
-		globalMux     = http.NewServeMux()
-		staticContent = flag.String("staticPath", "./swagger-ui", "Path to folder with Swagger UI")
+		httpPort  string
+		globalMux = http.NewServeMux()
 	)
 
 	flag.StringVar(&httpPort, "http.port", "9090", "http listening port")
@@ -75,16 +40,7 @@ func main() {
 	//Init data access
 	iniflags.Parse()
 
-	//all route operations added here
-	httpRouter := mux.NewRouter()
-	httpRouter.HandleFunc("/", IndexHandler).Methods("GET")
-
-	//api := operations.AuthAPI{}
-
-	//globalMux.Handle("/", api.Serve())
-	globalMux.Handle("/swagger-ui/", http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir(*staticContent))))
-	//globalMux.Handle("/swagger-ui/", http.FileServer(http.Dir("/swagger-ui")))
-	globalMux.Handle("/v1/auth/", buildRouter())
+	globalMux.Handle("/v1/auth/", api.BuildRouter())
 	log.Logger.Info("Authentication Server listening on port - ", httpPort)
 
 	//to handle CORS support
@@ -97,13 +53,6 @@ func main() {
 	})
 	corsHandler := c.Handler(globalMux)
 	//responseHandler := preJSONProcessor(corsHandler)
-
-	//http.HandleFunc("/", IndexHandler)
-	//http.Handle("/swagger-ui/", http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir(*staticContent))))
-
-	for apiKey, _ := range apiDescriptionsJson {
-		http.HandleFunc("/"+apiKey+"/", ApiDescriptionHandler)
-	}
 
 	//start server
 	s := &http.Server{

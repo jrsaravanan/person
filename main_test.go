@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"auth/api"
+
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/mock"
 )
@@ -25,7 +27,7 @@ func (m *MockHandler) Ping(w http.ResponseWriter, r *http.Request) {
 
 func init() {
 	mu = mux.NewRouter()
-	addPingRoute(mu, new(MockHandler))
+	api.AddPingRoute(mu, new(MockHandler))
 
 	respRec = httptest.NewRecorder()
 }
