@@ -17,16 +17,6 @@ import (
 	"github.com/vharitonsky/iniflags"
 )
 
-//postJSONProcessor add http header for all response
-func preJSONProcessor(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		next.ServeHTTP(w, r)
-	})
-}
-
 func main() {
 
 	var (
@@ -52,7 +42,7 @@ func main() {
 		AllowedHeaders:   []string{"*"},
 	})
 	corsHandler := c.Handler(globalMux)
-	responseHandler := preJSONProcessor(corsHandler)
+	responseHandler := api.PreJSONProcessor(corsHandler)
 
 	//start server
 	s := &http.Server{

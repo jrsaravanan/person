@@ -28,7 +28,6 @@ func (m *MockHandler) Ping(w http.ResponseWriter, r *http.Request) {
 func init() {
 	mu = mux.NewRouter()
 	api.AddPingRoute(mu, new(MockHandler))
-
 	respRec = httptest.NewRecorder()
 }
 

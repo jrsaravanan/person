@@ -19,6 +19,16 @@ func BuildRouter() *mux.Router {
 	return apiRouter
 }
 
+// PreJSONProcessor add http header for all response
+// intercept every request
+func PreJSONProcessor(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		next.ServeHTTP(w, r)
+	})
+}
+
 // AddPingRoute to check service avaialblity
 // @Title Ping
 // @Description ping auth service
