@@ -20,6 +20,6 @@ func TestPing(t *testing.T) {
 	w := httptest.NewRecorder()
 	c.Ping(w, r)
 	fmt.Printf("Response : %v", w)
-	assert.Equal(t, "success", w.Body.String(), "Wrong response code")
+	assert.Equal(t, "success", w.Body.String(), "Wrong response message")
 
 }

@@ -25,6 +25,9 @@ type (
 func (h *CommonController) Ping(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Write([]byte("success"))
+	//w.Header().Set("location", r.URL.Path)
+	w.WriteHeader(http.StatusAccepted)
+
 }
 
 //WithLogging log the request and response
