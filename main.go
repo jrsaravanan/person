@@ -9,6 +9,7 @@ import (
 	. "auth/log"
 
 	"github.com/gorilla/context"
+	"github.com/rs/cors"
 	"github.com/vharitonsky/iniflags"
 )
 
@@ -31,19 +32,19 @@ func main() {
 
 	//to handle CORS support
 	//Angular JS may use OPTION for PUT request , it is handled by CORS
-	/*c := cors.New(cors.Options{
+	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "DELETE", "PUT"},
 		AllowCredentials: true,
 		AllowedHeaders:   []string{"*"},
 	})
-	corsHandler := c.Handler(globalMux)*/
-	//responseHandler := api.PreJSONProcessor(corsHandler)
+	corsHandler := c.Handler(globalMux)
+	responseHandler := api.PreJSONProcessor(corsHandler)
 
 	//start server
 	s := &http.Server{
 		Addr:           ":" + httpPort,
-		Handler:        context.ClearHandler(globalMux),
+		Handler:        context.ClearHandler(responseHandler),
 		ReadTimeout:    30 * time.Second,
 		WriteTimeout:   30 * time.Second,
 		MaxHeaderBytes: 1 << 20,

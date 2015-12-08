@@ -1,3 +1,4 @@
 security.log
 log/security.log
 controller/security.log
+token/security.log
