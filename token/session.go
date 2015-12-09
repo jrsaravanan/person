@@ -21,6 +21,7 @@ type (
 	//IAuthToken token interface
 	IAuthToken interface {
 		LoginUser(l types.LoginUser) (usr types.LoginUser, err error)
+		InitDB()
 	}
 
 	//AuthToken token
@@ -85,4 +86,8 @@ func findExistingToken(userName string) string {
 		}
 	}
 	return ""
+}
+
+func (a *AuthToken) InitDB() {
+	a.InitDB()
 }

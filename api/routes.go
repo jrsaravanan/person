@@ -19,7 +19,9 @@ func BuildAuthRouter() *mux.Router {
 	apiRouter := mux.NewRouter()
 	commonController := new(controller.CommonController)
 
+	commonController.InitDB()
 	//Add Routes and controllers
+	AddAuthRoute(apiRouter, commonController)
 	AddPingRoute(apiRouter, commonController)
 
 	return apiRouter
@@ -56,4 +58,15 @@ func AddPingRoute(apiRouter *mux.Router, h controller.ICommonController) {
 	apiRouter.HandleFunc("/v1/auth/ping", func(rw http.ResponseWriter, req *http.Request) {
 		controller.WithLogging(rw, req, h.Ping)
 	}).Methods("GET")
+}
+
+// AddAuthRoute login
+// @Title Auth
+// @Description ping auth service
+// @Accept  json
+// @Success 200 string string
+// @Failure 404 string string
+// @Router /v1/auth [post]
+func AddAuthRoute(apiRouter *mux.Router, h controller.ICommonController) {
+	apiRouter.HandleFunc("/v1/auth", h.Login).Methods("POST")
 }

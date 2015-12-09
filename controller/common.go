@@ -3,11 +3,13 @@
 package controller
 
 import (
-	. "auth/log"
-	"auth/types"
 	"encoding/json"
 	"net/http"
 	"time"
+
+	. "auth/log"
+	"auth/token"
+	"auth/types"
 )
 
 type (
@@ -17,10 +19,13 @@ type (
 	ICommonController interface {
 		Ping(w http.ResponseWriter, r *http.Request)
 		Login(w http.ResponseWriter, r *http.Request)
+		InitDB()
 	}
 
 	//CommonController struct
-	CommonController struct{}
+	CommonController struct {
+		xauth token.AuthToken
+	}
 )
 
 //Ping to verify the service is up or not
@@ -43,7 +48,7 @@ func WithLogging(w http.ResponseWriter, r *http.Request,
 
 }
 
-// Login authenrication interface
+// Login authenication interface
 func (h *CommonController) Login(w http.ResponseWriter, r *http.Request) {
 
 	var l *types.LoginUser
@@ -52,4 +57,21 @@ func (h *CommonController) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	u, err := h.xauth.LoginUser(*l)
+	if err != nil {
+		Logger.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if er := json.NewEncoder(w).Encode(u); er != nil {
+		Logger.Error(err.Error())
+		http.Error(w, er.Error(), http.StatusInternalServerError)
+	}
+}
+
+//InitDB initalize DB
+func (h *CommonController) InitDB() {
+	token.NewDataAccess()
 }
