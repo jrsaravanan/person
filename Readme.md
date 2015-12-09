@@ -14,25 +14,27 @@ REST Web Service provides interface to authentication and authentication. It is 
  2 No Power user / admin functionalities avaiable :  super user to manage all other users
  3 List / In validate avaialable and it will NOT be exposed 
 
+
+## To Build
+```
+On your working directory 
+git clone git@10.137.2.164/RJILIDCAutomation/auth.git
+go install auth/...
+```
+
 ### Test
 ```
 go test -coverprofile cover.out 
 go tool cover -html=cover.out -o cover.html
 ```
 
-## To Build
-```
-On your woking directory 
-git clone git@10.137.2.164/RJILIDCAutomation/auth.git
-go install auth/...
-```
 
 ### Swagger : Under progress 
 ```
 swagger -apiPackage="Authentication API" -mainApiFile="auth/main.go"
 ```
 
-## API Endpoint and operations
+## API Endpoint and Operations
 List of supported resources, use with base url 
 
  - v1/auth/ping
