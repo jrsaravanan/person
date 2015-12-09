@@ -1,8 +1,12 @@
 package token
 
 import (
-	. "auth/log"
+	"math/rand"
+	"strconv"
 	"testing"
+
+	. "auth/log"
+	"auth/types"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,8 +18,7 @@ func TestFindUserPermissions(t *testing.T) {
 	defer dbConn.Close()
 	assert.NoError(t, err, "db connection failed")
 
-	u := UserRepository{}
-	list, err := u.FindUserPermissions("Saravanan.Renganatha")
+	list, err := findUserPermissions("Saravanan.Renganatha")
 	assert.NoError(t, err, "Getting permision failed")
 	Logger.Debug("list - ", list)
 
@@ -63,6 +66,55 @@ func TestUpdate(t *testing.T) {
 
 	repo := UserRepository{}
 
-	repo.UpdateRoles("test", "test", 3)
+	usr, err := repo.UpdateRoles("test", "test team", 3)
+	assert.NoError(t, err, "failed update roles")
+	assert.NotEmpty(t, usr, "user is not found")
+}
+
+func TestUpdateNewUser(t *testing.T) {
+
+	err := NewDataAccess()
+	defer dbConn.Close()
+	assert.NoError(t, err, "db connection failed")
+
+	repo := UserRepository{}
+	num := rand.Intn(100)
+
+	usr, err := repo.UpdateRoles("test"+strconv.Itoa(num), "test team", 3)
+	assert.NoError(t, err, "failed update roles")
+	assert.NotEmpty(t, usr, "user is not found")
+}
+
+func TestNoUser(t *testing.T) {
+
+	err := NewDataAccess()
+	defer dbConn.Close()
+	assert.NoError(t, err, "db connection failed")
+
+	auth := AuthToken{}
+	_, err = auth.LoginUser(types.LoginUser{UserName: "testtest", Password: "testtest", Domain: "local"})
+	assert.Error(t, err, "reqired no record expcetion")
+
+}
+
+func TestAuthentication(t *testing.T) {
+
+	err := NewDataAccess()
+	defer dbConn.Close()
+	assert.NoError(t, err, "db connection failed")
+
+	auth := AuthToken{}
+	l, err := auth.LoginUser(types.LoginUser{UserName: "test", Password: "test", Domain: "local"})
+	assert.NoError(t, err, "expected no record error")
+
+	Logger.Debugf("user values %+v", l)
+	assert.Equal(t, "test", l.UserName, "user name should be same ")
+	assert.NotEmpty(t, l.AuthToken, "auth token should be generated")
+	previousToken := l.AuthToken
+
+	// test alread logged user
+	l, err = auth.LoginUser(types.LoginUser{UserName: "test", Password: "test", Domain: "local"})
+	assert.NoError(t, err, "reqired no record expcetion")
+	assert.Equal(t, previousToken, l.AuthToken, "it should not create token for second time")
 
 }

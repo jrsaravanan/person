@@ -21,5 +21,4 @@ func TestPing(t *testing.T) {
 	c.Ping(w, r)
 	fmt.Printf("Response : %v", w)
 	assert.Equal(t, "success", w.Body.String(), "Wrong response message")
-
 }

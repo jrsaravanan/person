@@ -4,6 +4,8 @@ package controller
 
 import (
 	. "auth/log"
+	"auth/types"
+	"encoding/json"
 	"net/http"
 	"time"
 )
@@ -14,6 +16,7 @@ type (
 	//list of common functions
 	ICommonController interface {
 		Ping(w http.ResponseWriter, r *http.Request)
+		Login(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -25,7 +28,7 @@ type (
 func (h *CommonController) Ping(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("location", r.URL.Path)
-	w.WriteHeader(http.StatusOK)	
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("success"))
 }
 
@@ -38,4 +41,15 @@ func WithLogging(w http.ResponseWriter, r *http.Request,
 	endTime := time.Now()
 	Logger.Debug("ElapsedTime in seconds:", endTime.Sub(startTime))
 
+}
+
+// Login authenrication interface
+func (h *CommonController) Login(w http.ResponseWriter, r *http.Request) {
+
+	var l *types.LoginUser
+	if err := json.NewDecoder(r.Body).Decode(&l); err != nil {
+		Logger.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 }

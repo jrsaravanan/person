@@ -30,7 +30,6 @@ var (
 )
 
 func init() {
-
 	flag.StringVar(&dbschema, "db.schema", "cmdb", "db schema name")
 	flag.StringVar(&dbip, "db.ip", "127.0.0.1", "database ip address")
 	flag.StringVar(&dbport, "db.port", "3306", "database ip address")
@@ -43,9 +42,8 @@ type (
 	// IUserRepository interface
 	// set of  CURD operations on user and roles
 	IUserRepository interface {
-		FindUserPermissions(user string) ([]string, error)
 		LoginUser(user string, password string) (b bool, err error)
-		UpdateRoles(user string, team string, roleId string)
+		UpdateRoles(user string, team string, roleID int) (usr types.User, err error)
 	}
 
 	//UserRepository empty struct
@@ -70,7 +68,6 @@ func NewDataAccess() (err error) {
 	dbConn.SingularTable(true)
 	dbConn.LogMode(true)
 	return
-
 }
 
 // LoginUser get login user
@@ -86,7 +83,7 @@ func (u *UserRepository) LoginUser(user string, password string) (b bool, err er
 	if usr != nil {
 		b = true
 	}
-	Logger.Debugf("user %+v", user)
+	Logger.Debugf("user %+v", usr)
 	return
 }
 
@@ -135,13 +132,21 @@ func (u *UserRepository) Roles(user string) (usr *types.User, err error) {
 	rows.Scan(&roleName)
 
 	Logger.Debugf("User - %v Role Name -  %v ", usr.UserName, roleName)
-	usr.Roles[0] = types.Role{RoleName: roleName}
+	r := types.Role{RoleName: roleName}
+	p, err := findUserPermissions(usr.UserName)
+	if err != nil {
+		Logger.Error("user roles failed ", err.Error())
+		return
+	}
+	// usr.Roles[0].Permission = FindUserPermissions(usr.UserName)
+	r.Permission = p
+	usr.Roles[0] = r
 
 	return
 }
 
-//FindUserPermissions to get permission list for given user
-func (u *UserRepository) FindUserPermissions(user string) (permissions []string, err error) {
+//findUserPermissions to get permission list for given user
+func findUserPermissions(user string) (permissions []string, err error) {
 
 	query := "SELECT  p.perm_key FROM  t_role_permission AS rp LEFT JOIN " +
 		" t_user_role AS ur ON rp.role_id = ur.role_id " +
@@ -170,10 +175,11 @@ func (u *UserRepository) FindUserPermissions(user string) (permissions []string,
 	return
 }
 
-func (u *UserRepository) UpdateRoles(user string, team string, roleId int) {
+// UpdateRoles add role to new user or exsiting user
+func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (usr types.User, err error) {
 
 	//find user availablity
-	var usr types.User
+	//var usr types.User
 	tx := dbConn.Begin()
 	err = tx.Find(&usr, types.User{UserName: user}).Error
 	if err != nil && !strings.EqualFold(err.Error(), "record not found") {
@@ -181,21 +187,34 @@ func (u *UserRepository) UpdateRoles(user string, team string, roleId int) {
 		Logger.Error(err.Error())
 		return
 	}
-
-	Logger.Debugf("user value - %+v", usr)
+	Logger.Debugf("find user detail %+v", usr)
 
 	//if user not available , create new user
 	if usr.UserName == "" {
 		err = tx.Save(&types.User{UserName: user, Team: team}).Error
+		Logger.Debugf("New user added %s ", user)
 		if err != nil {
 			tx.Rollback()
 			Logger.Error("Saving user failed ", err.Error())
+			return
 		}
-
 	}
 
+	//TODO : Dirty fix again
+	//since it
+	r := new(types.UserRole)
+	err = tx.Find(&r, types.UserRole{UserID: usr.ID}).Error
+	Logger.Debugf("user role details %+v ", r)
+
+	if r.UserRoleID == 0 {
+		r.UserID = usr.ID
+	}
+	//update roles
+	r.RoleID = roleID
+	tx.Save(&r)
 	tx.Commit()
 	tx.Close()
-	//tx.Commit()
-	Logger.Debugf("New user %s created ", user)
+
+	Logger.Debugf("Roles added for the user %s ", user)
+	return
 }
