@@ -28,7 +28,7 @@ type (
 	// Role given roles
 	Role struct {
 		ID         int      `sql:"AUTO_INCREMENT" gorm:"column:role_id;primary_key" json:"Id,omitempty"`
-		RoleName   string   `gorm:"column:role_name" json:"role_Name,omitempty"`
+		RoleName   string   `gorm:"column:role_name" json:"roleName,omitempty"`
 		CreateAt   string   `gorm:"column:created_at" json:"createdAt,omitempty"`
 		Permission []string `json:"permission,omitempty"`
 	}

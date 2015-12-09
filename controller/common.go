@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/mux"
+
 	. "auth/log"
 	"auth/token"
 	"auth/types"
@@ -18,9 +20,10 @@ type (
 	//ICommonController common interface
 	//list of common functions
 	ICommonController interface {
+		InitDB()
 		Ping(w http.ResponseWriter, r *http.Request)
 		Login(w http.ResponseWriter, r *http.Request)
-		InitDB()
+		Roles(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -70,6 +73,25 @@ func (h *CommonController) Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Roles get roles for given x-auth-token
+func (h *CommonController) Roles(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	uuid := vars["x-auth-token"]
+	Logger.Debugf("get roles for %s", uuid)
+
+	ur, err := h.xauth.AuthRoles(uuid)
+	if err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(ur); err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+}
+
 //translate error codes on error
 //
 func doErrorTranslation(w http.ResponseWriter, err error) {
@@ -77,8 +99,8 @@ func doErrorTranslation(w http.ResponseWriter, err error) {
 	Logger.Errorf("Message %s - error - %+v", err.Error(), err)
 	if strings.EqualFold(err.Error(), "record not found") {
 		http.Error(w, "Invalid user name or password", http.StatusNotFound)
-	} else if strings.Contains(err.Error(), "Error 1062:") {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else if strings.Contains(err.Error(), "Invalid token") {
+		http.Error(w, err.Error(), http.StatusNotFound)
 	} else {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -87,5 +109,5 @@ func doErrorTranslation(w http.ResponseWriter, err error) {
 
 //InitDB initalize DB
 func (h *CommonController) InitDB() {
-	token.NewDataAccess()
+	h.xauth.InitDB()
 }

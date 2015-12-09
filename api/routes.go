@@ -20,9 +20,11 @@ func BuildAuthRouter() *mux.Router {
 	commonController := new(controller.CommonController)
 
 	commonController.InitDB()
+
 	//Add Routes and controllers
-	AddAuthRoute(apiRouter, commonController)
 	AddPingRoute(apiRouter, commonController)
+	AddAuthRoute(apiRouter, commonController)
+	AddRolesRoute(apiRouter, commonController)
 
 	return apiRouter
 }
@@ -69,4 +71,16 @@ func AddPingRoute(apiRouter *mux.Router, h controller.ICommonController) {
 // @Router /v1/auth/x [post]
 func AddAuthRoute(apiRouter *mux.Router, h controller.ICommonController) {
 	apiRouter.HandleFunc("/v1/auth/x", h.Login).Methods("POST")
+}
+
+// AddRolesRoute get roles for given x-auth-token
+// @Title GetRoles
+// @Description ping auth service
+// @Accept  json
+// @Success 200 string string
+// @Failure 404 string string
+// @Failure 503 string string
+// @Router /v1/auth/{x-auth-token}/roles [post]
+func AddRolesRoute(apiRouter *mux.Router, h controller.ICommonController) {
+	apiRouter.HandleFunc("/v1/auth/{x-auth-token}/roles", h.Roles).Methods("GET")
 }

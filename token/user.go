@@ -44,6 +44,7 @@ type (
 	IUserRepository interface {
 		LoginUser(user string, password string) (b bool, err error)
 		UpdateRoles(user string, team string, roleID int) (usr types.User, err error)
+		Roles(user string) (usr *types.User, err error)
 	}
 
 	//UserRepository empty struct

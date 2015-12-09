@@ -39,6 +39,7 @@ List of supported resources, use with base url
 
  - v1/auth/ping
  - v1/auth/x
+ - /v1/auth/{x-auth-token}/roles
 
 ### Auth v1/auth/ping
 To check the service is up and running.
@@ -84,3 +85,42 @@ Failure :
 ```    
 
 
+### Roles v1/auth/{x-auth-token}/roles
+To get available CMDB roles for that specific user. 
+
+```
+Request 
+http://localhost:9090/v1/auth/5f70b7b6-7f96-40cd-a317-222a1621efbf/roles
+Http Method : POST
+
+Response:
+
+Success :
+    Status Code: 200 OK
+    {
+        "Id": 91,
+        "userName": "test",
+        "team": "test",
+        "Roles":
+        [
+            {
+                "role_Name": "AUTOMATION",
+                "permission":
+                [
+                    "access_site",
+                    "access_pe",
+                    "create_project",
+                    "view_project",
+                    "create_subnet",
+                    "view_subnet",
+                    "create_os_profile",
+                    "view_os_profile"
+                ]
+            }
+        ]
+    }
+
+Failure
+    Status Code : 404 Not Found
+    Invalid token xxxx-xxxx-xxx
+```

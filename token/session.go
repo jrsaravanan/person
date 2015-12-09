@@ -1,6 +1,7 @@
 package token
 
 import (
+	"fmt"
 	"sync"
 
 	. "auth/log"
@@ -21,7 +22,8 @@ type (
 	//IAuthToken token interface
 	IAuthToken interface {
 		LoginUser(l types.LoginUser) (usr types.LoginUser, err error)
-		InitDB()
+		AuthRoles(xauth string) (usr *types.User, err error)
+		InitDB() (err error)
 	}
 
 	//AuthToken token
@@ -81,11 +83,21 @@ func (a *AuthToken) Authenticate(l types.LoginUser) {
 
 }
 
-// Authenticate login interface method
-func (a *AuthToken) Roles(xauth string) {
+// AuthRoles get roles for the given xauth token
+// return invalid token error for unavailable user token
+func (a *AuthToken) AuthRoles(xauth string) (r *types.User, err error) {
 
 	u := token[xauth]
-	a.repo.Roles(u.UserName)
+	if u == (types.LoginUser{}) {
+		err = fmt.Errorf("Invalid token %s", xauth)
+		return
+	}
+
+	r, err = a.repo.Roles(u.UserName)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func findExistingToken(userName string) string {
@@ -98,6 +110,9 @@ func findExistingToken(userName string) string {
 	return ""
 }
 
-func (a *AuthToken) InitDB() {
-	a.InitDB()
+// InitDB initalize DB
+// wrapper class
+func (a *AuthToken) InitDB() (err error) {
+	err = NewDataAccess()
+	return
 }
