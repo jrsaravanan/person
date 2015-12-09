@@ -37,9 +37,16 @@ swagger -apiPackage="Authentication API" -mainApiFile="auth/main.go"
 ## API Endpoint and Operations
 List of supported resources, use with base url 
 
- - v1/auth/ping
- - v1/auth/x
- - v1/auth/{x-auth-token}/roles
+ - v1/auth/ping : ping : GET
+ - v1/auth/x : login : POST
+ - v1/auth/{x-auth-token}/roles : get roles : GET
+ - v1/auth/{x-auth-token} : check is user is active :GET
+
+ Admin Operations
+ > It requies a key  to get your key , reach out development team for key
+ - v1/list : list tokens : GET
+ - v1/auth/{x-auth-token} : delete a token : DELETE
+ - v1/auth
 
 ### Auth v1/auth/ping
 To check the service is up and running.
