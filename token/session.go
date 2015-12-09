@@ -1,6 +1,7 @@
 package token
 
 import (
+	"flag"
 	"fmt"
 	"sync"
 
@@ -14,6 +15,7 @@ import (
 var (
 	lock  = &sync.Mutex{}
 	token = make(map[string]types.LoginUser)
+	sto   float64
 	//umap  = make(map[string]types.User)
 )
 
@@ -31,6 +33,10 @@ type (
 		repo UserRepository
 	}
 )
+
+func init() {
+	flag.Float64Var(&sto, "session.timeout", 2.0, "auth token session time out ")
+}
 
 // CreateToken create new token
 func CreateToken() string {
@@ -108,6 +114,33 @@ func findExistingToken(userName string) string {
 		}
 	}
 	return ""
+}
+
+//ListTokens list avaiable tokens
+func (a *AuthToken) ListTokens() map[string]types.LoginUser {
+	return token
+}
+
+// InvalidateTokens find auth session are valid
+func InvalidateTokens() {
+	lock.Lock()
+	defer lock.Unlock()
+
+	for key, u := range token {
+		if findTimeOut(u) {
+			delete(token, key)
+		}
+	}
+}
+
+// find if the user is active or not
+func findTimeOut(usr types.LoginUser) bool {
+	now := time.Now()
+	duration := now.Sub(usr.LastUpdatedTime)
+	if duration.Minutes() > sto {
+		return true
+	}
+	return false
 }
 
 // InitDB initalize DB

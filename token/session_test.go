@@ -69,3 +69,17 @@ func TestRoles(t *testing.T) {
 	assert.NoError(t, err, "should not be any error while getting the roles")
 	Logger.Debugf("Roles %+v", r)
 }
+
+// TestListoken create new token
+func TestListoken(t *testing.T) {
+
+	uuid := CreateToken()
+	token[uuid] = types.LoginUser{UserName: "test_user_token"}
+
+	auth := AuthToken{}
+	Logger.Debugf("Roles %+v", token)
+	m := auth.ListTokens()
+	user := m[uuid]
+	assert.NotEmpty(t, user, "get test user")
+	assert.Equal(t, "test_user_token", user.UserName, "check user name in object")
+}

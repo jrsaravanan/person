@@ -25,6 +25,18 @@ type MockHandler struct {
 func (m *MockHandler) Ping(w http.ResponseWriter, r *http.Request) {
 }
 
+func (m *MockHandler) InitDB() {
+}
+
+func (m *MockHandler) ListTokens(w http.ResponseWriter, r *http.Request) {
+}
+
+func (m *MockHandler) Login(w http.ResponseWriter, r *http.Request) {
+}
+
+func (m *MockHandler) Roles(w http.ResponseWriter, r *http.Request) {
+}
+
 func init() {
 	mu = mux.NewRouter()
 	api.AddPingRoute(mu, new(MockHandler))

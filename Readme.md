@@ -39,7 +39,7 @@ List of supported resources, use with base url
 
  - v1/auth/ping
  - v1/auth/x
- - /v1/auth/{x-auth-token}/roles
+ - v1/auth/{x-auth-token}/roles
 
 ### Auth v1/auth/ping
 To check the service is up and running.

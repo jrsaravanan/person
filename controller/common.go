@@ -24,6 +24,7 @@ type (
 		Ping(w http.ResponseWriter, r *http.Request)
 		Login(w http.ResponseWriter, r *http.Request)
 		Roles(w http.ResponseWriter, r *http.Request)
+		ListTokens(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -92,6 +93,15 @@ func (h *CommonController) Roles(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ListTokens Authentication Tokens
+func (h *CommonController) ListTokens(w http.ResponseWriter, r *http.Request) {
+	list := h.xauth.ListTokens()
+	if err := json.NewEncoder(w).Encode(list); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 //translate error codes on error
 //
 func doErrorTranslation(w http.ResponseWriter, err error) {
@@ -105,6 +115,11 @@ func doErrorTranslation(w http.ResponseWriter, err error) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+}
+
+// InvalidateToken
+func InvalidateToken() {
+	token.InvalidateTokens()
 }
 
 //InitDB initalize DB

@@ -41,6 +41,8 @@ func main() {
 	corsHandler := c.Handler(globalMux)
 	responseHandler := api.PreJSONProcessor(corsHandler)
 
+	api.StartScheduler()
+
 	//start server
 	s := &http.Server{
 		Addr:           ":" + httpPort,
@@ -49,6 +51,7 @@ func main() {
 		WriteTimeout:   30 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+
 	Logger.Fatal(s.ListenAndServe())
 
 }
