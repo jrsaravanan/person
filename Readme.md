@@ -17,9 +17,9 @@ REST Web Service provides interface to authentication and authentication. It is 
 ```
 go test -coverprofile cover.out 
 go tool cover -html=cover.out -o cover.html
-...
+```
 
 ### Swagger : Under progress 
 ```
 swagger -apiPackage="Authentication API" -mainApiFile="auth/main.go"
-...
+```
