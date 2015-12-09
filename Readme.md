@@ -131,3 +131,36 @@ Failure
     Status Code : 404 Not Found
     Invalid token xxxx-xxxx-xxx
 ```
+
+### List v1/auth/list
+Returns all the available active tokens.
+
+```
+Request 
+http://localhost:9090/v1/auth/list
+Http Method : GET
+
+Response:
+
+Sucess :
+     Status Code: 200 OK
+    {
+        "a90b79a4-4baa-4f98-9c89-87038b60aa0c":
+        {
+            "userName": "saravanan",
+            "x-auth-token": "a90b79a4-4baa-4f98-9c89-87038b60aa0c",
+            "tokenCreateAt": "2015-12-09T17:46:09.6391637-05:00",
+            "lastUpdatedTime": "2015-12-09T17:46:09.6391637-05:00"
+        },
+        "d5c3f742-9a5d-444d-aa60-e51a8f84d8ba":
+        {
+            "userName": "test",
+            "x-auth-token": "d5c3f742-9a5d-444d-aa60-e51a8f84d8ba",
+            "tokenCreateAt": "2015-12-09T17:46:19.9354148-05:00",
+            "lastUpdatedTime": "2015-12-09T17:46:19.9354148-05:00"
+        }
+    }
+
+Failure
+     Status Code: 503 
+```
