@@ -5,14 +5,14 @@ Authentication and Authorization API
 
 REST Web Service provides interface to authentication and authentication. It is integrated with RIL Active Directory. Can validated given user is available and 'active' in the AD server or not. It will generate a token on successful login and token removed will be removed after 30 minutes  if there are no action.
 
- 1 Validate user in AD and create a UUID  
- 2 Maintain authentication session validate user for any application
- 3 Provides Roles and Permission for CMDB
+ - Validate user in AD and create a UUID  
+ - Maintain authentication session validate user for any application
+ - Provides Roles and Permission for CMDB
 
 ## Limitations
- 1 No Generic Roles/Permission handling
- 2 No Power user / admin functionalities avaiable :  super user to manage all other users
- 3 List / In validate avaialable and it will NOT be exposed 
+ - No Generic Roles/Permission handling
+ - No Power user / admin functionalities avaiable :  super user to manage all other users
+ - List / In validate avaialable and it will NOT be exposed 
 
 
 ## To Build
