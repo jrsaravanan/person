@@ -27,7 +27,7 @@ func main() {
 	iniflags.Parse()
 
 	globalMux.Handle("/", api.BuildAPIRouter())
-	globalMux.Handle("/v1/auth", api.BuildAuthRouter())
+	globalMux.Handle("/v1/auth/", api.BuildAuthRouter())
 	Logger.Info("Authentication Server listening on port - ", httpPort)
 
 	//to handle CORS support

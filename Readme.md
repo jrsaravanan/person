@@ -32,19 +32,50 @@ go install auth/...
 swagger -apiPackage="Authentication API" -mainApiFile="auth/main.go"
 ```
 
-## Endpoints
+## API Endpoint and operations
+List of supported resources, use with base url 
 
+ - v1/auth/ping
+ - v1/auth/x
 
-http://localhost:9090/v1/auth
-{"userName":"test","password":"test","domain":"local"}
+### Auth v1/auth/ping
+To check the service is up and running.
+
+```
+Request
+http://localhost:9090/v1/auth/ping
+Http Method : GET
 
 Success :
+	Status Code: 200 OK
+Failure :
+    No Response : Service Not Available
+    Status Code : 50x Service Not Available / Internal Error
+```
 
+### Auth v1/auth
+Validate the login informations and provides authentication token on sucessfull login.
 
+```
+Request 
+http://localhost:9090/v1/auth/x
+{"userName":"test","password":"test","domain":"local"}
+ttp Method : POST
+
+Response:
+
+Success :
+	Status Code: 200 OK
     {
         "userName": "test",
         "x-auth-token": "e8e5d0e3-8b3d-49ef-a1d0-b36d9cd10a9d",
         "tokenCreateAt": "2015-12-09T09:53:26.1163404-05:00",
         "lastUpdatedTime": "2015-12-09T09:53:26.1163404-05:00"
     }
+
+Failure :
+    Status Code: 404 Not Found
+    Invalid user name or password
+```    
+
 

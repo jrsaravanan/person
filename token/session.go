@@ -55,9 +55,10 @@ func (a *AuthToken) LoginUser(l types.LoginUser) (usr types.LoginUser, err error
 		return
 	}
 
+	//if user already logged in send the same x-auth-token
+	//update the LastUpdatedTime to now
 	authToken := findExistingToken(l.UserName)
 	usr = token[authToken]
-
 	if usr == (types.LoginUser{}) {
 		authToken = CreateToken()
 		usr = types.LoginUser{
@@ -68,6 +69,8 @@ func (a *AuthToken) LoginUser(l types.LoginUser) (usr types.LoginUser, err error
 		}
 		token[authToken] = usr
 
+	} else {
+		usr.LastUpdatedTime = time.Now()
 	}
 
 	return
@@ -76,6 +79,13 @@ func (a *AuthToken) LoginUser(l types.LoginUser) (usr types.LoginUser, err error
 // Authenticate login interface method
 func (a *AuthToken) Authenticate(l types.LoginUser) {
 
+}
+
+// Authenticate login interface method
+func (a *AuthToken) Roles(xauth string) {
+
+	u := token[xauth]
+	a.repo.Roles(u.UserName)
 }
 
 func findExistingToken(userName string) string {

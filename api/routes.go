@@ -66,7 +66,7 @@ func AddPingRoute(apiRouter *mux.Router, h controller.ICommonController) {
 // @Accept  json
 // @Success 200 string string
 // @Failure 404 string string
-// @Router /v1/auth [post]
+// @Router /v1/auth/x [post]
 func AddAuthRoute(apiRouter *mux.Router, h controller.ICommonController) {
-	apiRouter.HandleFunc("/v1/auth", h.Login).Methods("POST")
+	apiRouter.HandleFunc("/v1/auth/x", h.Login).Methods("POST")
 }

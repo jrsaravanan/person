@@ -5,6 +5,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 
 	. "auth/log"
@@ -53,22 +54,35 @@ func (h *CommonController) Login(w http.ResponseWriter, r *http.Request) {
 
 	var l *types.LoginUser
 	if err := json.NewDecoder(r.Body).Decode(&l); err != nil {
-		Logger.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		doErrorTranslation(w, err)
 		return
 	}
 
 	u, err := h.xauth.LoginUser(*l)
 	if err != nil {
-		Logger.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		doErrorTranslation(w, err)
 		return
 	}
 
-	if er := json.NewEncoder(w).Encode(u); er != nil {
-		Logger.Error(err.Error())
-		http.Error(w, er.Error(), http.StatusInternalServerError)
+	if err = json.NewEncoder(w).Encode(u); err != nil {
+		doErrorTranslation(w, err)
+		return
 	}
+}
+
+//translate error codes on error
+//
+func doErrorTranslation(w http.ResponseWriter, err error) {
+
+	Logger.Errorf("Message %s - error - %+v", err.Error(), err)
+	if strings.EqualFold(err.Error(), "record not found") {
+		http.Error(w, "Invalid user name or password", http.StatusNotFound)
+	} else if strings.Contains(err.Error(), "Error 1062:") {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 }
 
 //InitDB initalize DB
