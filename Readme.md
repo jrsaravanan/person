@@ -57,11 +57,14 @@ Failure :
 
 ### Auth v1/auth
 Validate the login informations and provides authentication token on sucessfull login.
+It supports RIL AD (domain : in) and database authentication. By default the user name and passowrd will be verified in Active Directory.If you want to enable  database authentication you should send 'domain' flag in your request. 
+> domain : local - enable database authentication
+i.e : {"userName":"test","password":"test","domain":"local"}
 
 ```
 Request 
 http://localhost:9090/v1/auth/x
-{"userName":"test","password":"test","domain":"local"}
+{"userName":"test","password":"test"}
 ttp Method : POST
 
 Response:
