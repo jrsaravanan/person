@@ -141,7 +141,9 @@ func (u *UserRepository) Roles(user string) (usr *types.User, err error) {
 	}
 	// usr.Roles[0].Permission = FindUserPermissions(usr.UserName)
 	r.Permission = p
-	usr.Roles[0] = r
+	usr.Roles = r
+	//usr.Roles = make([]types.Role, 1)
+	//usr.Roles[0] = r
 
 	return
 }
@@ -177,22 +179,24 @@ func findUserPermissions(user string) (permissions []string, err error) {
 }
 
 // UpdateRoles add role to new user or exsiting user
-func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (usr types.User, err error) {
+func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (s types.User, err error) {
 
 	//find user availablity
-	//var usr types.User
+	//var u types.User
 	tx := dbConn.Begin()
-	err = tx.Find(&usr, types.User{UserName: user}).Error
+	Logger.Debugf("user %s , team %s , roles %s", s.UserName, s.Team, s.Roles.ID)
+	err = tx.Find(&s, types.User{UserName: user}).Error
 	if err != nil && !strings.EqualFold(err.Error(), "record not found") {
 		tx.Rollback()
 		Logger.Error(err.Error())
 		return
 	}
-	Logger.Debugf("find user detail %+v", usr)
+	Logger.Debugf("find user detail %+v", s)
 
 	//if user not available , create new user
-	if usr.UserName == "" {
-		err = tx.Save(&types.User{UserName: user, Team: team}).Error
+	if s.UserName == "" {
+		s = types.User{UserName: user, Team: team}
+		err = tx.Save(&s).Error
 		Logger.Debugf("New user added %s ", user)
 		if err != nil {
 			tx.Rollback()
@@ -204,17 +208,16 @@ func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (usr 
 	//TODO : Dirty fix again
 	//since it
 	r := new(types.UserRole)
-	err = tx.Find(&r, types.UserRole{UserID: usr.ID}).Error
+	err = tx.Find(&r, types.UserRole{UserID: s.ID}).Error
 	Logger.Debugf("user role details %+v ", r)
 
 	if r.UserRoleID == 0 {
-		r.UserID = usr.ID
+		r.UserID = s.ID
 	}
 	//update roles
 	r.RoleID = roleID
 	tx.Save(&r)
 	tx.Commit()
-	tx.Close()
 
 	Logger.Debugf("Roles added for the user %s ", user)
 	return

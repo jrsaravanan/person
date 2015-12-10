@@ -19,10 +19,10 @@ type (
 
 	//User datatype
 	User struct {
-		ID       int     `sql:"AUTO_INCREMENT" gorm:"column:user_id;primary_key" json:"Id,omitempty"`
-		UserName string  `gorm:"column:username;primary_key" json:"userName,omitempty"`
-		Team     string  `gorm:"column:team" json:"team,omitempty"`
-		Roles    [1]Role `sql:"-"`
+		ID       int    `sql:"AUTO_INCREMENT" gorm:"column:user_id;primary_key" json:"Id,omitempty"`
+		UserName string `gorm:"column:username;primary_key" json:"userName,omitempty"`
+		Team     string `gorm:"column:team" json:"team,omitempty"`
+		Roles    Role   `sql:"-"`
 	}
 
 	// Role given roles

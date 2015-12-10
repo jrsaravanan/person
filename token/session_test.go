@@ -97,3 +97,21 @@ func TestTouch(t *testing.T) {
 	err = auth.TocuhToken("invalid-token")
 	assert.Error(t, err, "Invalid token error expected")
 }
+
+// TestTouch create new token
+func TestUpdateRoles(t *testing.T) {
+
+	//var r []types.Role{}
+
+	u := types.User{UserName: "TestUser123",
+		Team:  "TestUser",
+		Roles: types.Role{ID: 10},
+	}
+
+	NewDataAccess()
+	auth := AuthToken{}
+	r, err := auth.UpdateRoles(u)
+	assert.NoError(t, err, "should be update the new roles")
+	assert.NotEmpty(t, r, "returns valid roles")
+
+}

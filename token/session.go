@@ -27,6 +27,7 @@ type (
 		AuthRoles(xauth string) (usr *types.User, err error)
 		InitDB() (err error)
 		TouchToken(xauth string) (err error)
+		UpdateRoles(u types.User) (usr *types.User, err error)
 	}
 
 	//AuthToken token
@@ -163,4 +164,17 @@ func findTimeOut(usr types.LoginUser) bool {
 func (a *AuthToken) InitDB() (err error) {
 	err = NewDataAccess()
 	return
+}
+
+// UpdateRoles get roles for the given xauth token
+// return invalid token error for unavailable user token
+func (a *AuthToken) UpdateRoles(u types.User) (r *types.User, err error) {
+
+	Logger.Debugf("user %s , team %s , roles %d", u.UserName, u.Team, u.Roles.ID)
+	a.repo.UpdateRoles(u.UserName, u.Team, u.Roles.ID)
+	r, err = a.repo.Roles(u.UserName)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
 }

@@ -26,6 +26,7 @@ type (
 		Roles(w http.ResponseWriter, r *http.Request)
 		ListTokens(w http.ResponseWriter, r *http.Request)
 		TouchToken(w http.ResponseWriter, r *http.Request)
+		AddModifyRoles(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -118,6 +119,27 @@ func (h *CommonController) TouchToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err = json.NewEncoder(w).Encode(uuid); err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+}
+
+// AddModifyRoles add or modify roles
+func (h *CommonController) AddModifyRoles(w http.ResponseWriter, r *http.Request) {
+
+	var u *types.User
+	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+
+	ur, err := h.xauth.UpdateRoles(*u)
+	if err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(ur); err != nil {
 		doErrorTranslation(w, err)
 		return
 	}
