@@ -26,7 +26,8 @@ Here are the steps:
 - Use x-auth-token as a key 
 - validate the it is valid x-auth-token or not using v1/auth/x/{x-auth-token}
 
-| S.NO | EVN  | Endpoint                          | Status              |
+## Environment
+| S.NO | ENV  | Endpoint                          | Status              |
 | ---- | ---- |---------------------------------- | ------------------- |
 | 1    | DEV  | http://10.137.2.42:9091/v1/auth   | Down                |
 | 2    | QA   | http://10.137.2.228:9090/v1/auth  | Yet to be deployed  |
