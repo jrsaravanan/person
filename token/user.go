@@ -207,13 +207,13 @@ func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (s ty
 
 	//TODO : Dirty fix again
 	//since it
-	r := new(types.UserRole)
+	var r types.UserRole
 	err = tx.Find(&r, types.UserRole{UserID: s.ID}).Error
 	Logger.Debugf("user role details %+v ", r)
 
-	if r.UserRoleID == 0 {
-		r.UserID = s.ID
-	}
+	//if r.UserRoleID == 0 {
+	r.UserID = s.ID
+	//}
 	//update roles
 	r.RoleID = roleID
 	tx.Save(&r)

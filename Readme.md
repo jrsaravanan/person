@@ -15,7 +15,14 @@ REST Web Service provides interface to authentication and authentication. It is 
  - List / In validate avaialable and it will NOT be exposed 
 
 ## Authentication Token Invalidation
-Authentication token will be invalidated 
+Authentication token will be invalidated every 30 mins. If there are no activity or touch in the session for 20 mins it will be considered as inactive session.
+
+## How to integrate Auth API in a application ?
+Here are the steps
+    - Login or authenticate using v1/auth/x 
+    - Once you logged in you will be provided with x-auth-token
+    - Use x-auth-token as a key 
+    - validate the it is valid x-auth-token or not using v1/auth/x/{x-auth-token}
 
 ## To Build
 ```
@@ -47,8 +54,7 @@ List of supported resources, use with base url
  Admin Operations
  > It requies a key  to get your key , reach out development team for key
  - v1/list : list tokens : GET
- - v1/auth/{x-auth-token} : delete a token : DELETE
- - v1/auth
+ - /v1/auth/roles : Add new roles : POST
 
 ### Auth v1/auth/ping
 To check the service is up and running.
@@ -185,3 +191,40 @@ Failure
      Status Code: 404 Not Found
      Invalid token 79aa10c0-6538-4b2c-ac19-dc6e7f00a3fcsd
 ```
+
+
+{"userName":"testxyz","team":"testxyx","domain":"local" ,"Roles":[{"Id" : 10}] }
+
+
+### AddRole v1/auth/roles
+add new roles to user. This method has some known issuse
+
+```
+Request 
+http://localhost:9090/v1/auth/roles
+{"userName":"test812q","team":"IDC Test Team","Roles":{"Id" :121210} }
+Http Method : POST
+
+Response:
+
+Sucess :
+    
+
+    {
+        "Id": 117,
+        "userName": "test82",
+        "team": "IDC Test Team",
+        "Roles":
+        {
+            "roleName": "NOC SERVER"
+        }
+    }
+
+
+
+Failure
+     Status Code: 400 Bad Request
+     
+```
+
+
