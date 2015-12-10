@@ -21,10 +21,10 @@ Authentication token will be invalidated every 30 mins. If there are no activity
 
 Here are the steps:
 
-    - Login or authenticate using v1/auth/x 
-    - Once you logged in you will be provided with x-auth-token
-    - Use x-auth-token as a key 
-    - validate the it is valid x-auth-token or not using v1/auth/x/{x-auth-token}
+- Login or authenticate using v1/auth/x
+- Once you logged in you will be provided with x-auth-token
+- Use x-auth-token as a key 
+- validate the it is valid x-auth-token or not using v1/auth/x/{x-auth-token}
 
 ## To Build
 ```
@@ -194,10 +194,6 @@ Failure
      Invalid token 79aa10c0-6538-4b2c-ac19-dc6e7f00a3fcsd
 ```
 
-
-{"userName":"testxyz","team":"testxyx","domain":"local" ,"Roles":[{"Id" : 10}] }
-
-
 ### AddRole v1/auth/roles
 add new roles to user. This method has some known issuse
 
@@ -210,8 +206,6 @@ Http Method : POST
 Response:
 
 Sucess :
-    
-
     {
         "Id": 117,
         "userName": "test82",
@@ -221,8 +215,6 @@ Sucess :
             "roleName": "NOC SERVER"
         }
     }
-
-
 
 Failure
      Status Code: 400 Bad Request
