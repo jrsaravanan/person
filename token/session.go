@@ -26,6 +26,7 @@ type (
 		LoginUser(l types.LoginUser) (usr types.LoginUser, err error)
 		AuthRoles(xauth string) (usr *types.User, err error)
 		InitDB() (err error)
+		TouchToken(xauth string) (err error)
 	}
 
 	//AuthToken token
@@ -119,6 +120,20 @@ func findExistingToken(userName string) string {
 //ListTokens list avaiable tokens
 func (a *AuthToken) ListTokens() map[string]types.LoginUser {
 	return token
+}
+
+// TocuhToken update active timestamp
+func (a *AuthToken) TocuhToken(xauthToken string) (err error) {
+	u := token[xauthToken]
+
+	if u == (types.LoginUser{}) {
+		err = fmt.Errorf("Invalid token %s", xauthToken)
+		return
+	}
+	Logger.Debugf("updated user %+v", u)
+	// touch the time
+	u.LastUpdatedTime = time.Now()
+	return
 }
 
 // InvalidateTokens find auth session are valid

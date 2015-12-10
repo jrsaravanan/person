@@ -37,6 +37,9 @@ func (m *MockHandler) Login(w http.ResponseWriter, r *http.Request) {
 func (m *MockHandler) Roles(w http.ResponseWriter, r *http.Request) {
 }
 
+func (m *MockHandler) TouchToken(w http.ResponseWriter, r *http.Request) {
+}
+
 func init() {
 	mu = mux.NewRouter()
 	api.AddPingRoute(mu, new(MockHandler))

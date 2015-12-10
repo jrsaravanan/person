@@ -8,18 +8,25 @@ package api
 
 import (
 	"auth/controller"
+	"flag"
 	"net/http"
 
 	"github.com/claudiu/gocron"
 	"github.com/gorilla/mux"
 )
 
+var delay uint64
+
+func init() {
+	flag.Uint64Var(&delay, "session.scheduler", 10, "auth token session scheduler start time ")
+}
+
 //BuildAuthRouter building all routes
 func BuildAuthRouter() *mux.Router {
+
 	//init routers and controllers
 	apiRouter := mux.NewRouter()
 	commonController := new(controller.CommonController)
-
 	commonController.InitDB()
 
 	//Add Routes and controllers
@@ -33,17 +40,18 @@ func BuildAuthRouter() *mux.Router {
 
 //BuildAPIRouter building all routes
 func BuildAPIRouter() *mux.Router {
+
 	//init routers and controllers
 	apiRouter := mux.NewRouter()
 	apiRouter.Headers("Content-Type", "text/html")
-	//http.HandleFunc("/", IndexHandler)
 	apiRouter.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir("./swagger-ui/"))))
-
 	return apiRouter
 }
 
+// StartScheduler start the scheduler
 func StartScheduler() {
-	gocron.Every(3).Seconds().Do(controller.InvalidateToken)
+
+	gocron.Every(delay).Minutes().Do(controller.InvalidateToken)
 	gocron.Start()
 }
 
@@ -78,6 +86,7 @@ func AddPingRoute(apiRouter *mux.Router, h controller.ICommonController) {
 // @Router /v1/auth/x [post]
 func AddAuthRoute(apiRouter *mux.Router, h controller.ICommonController) {
 	apiRouter.HandleFunc("/v1/auth/x", h.Login).Methods("POST")
+	apiRouter.HandleFunc("/v1/auth/x/{x-auth-token}", h.TouchToken).Methods("GET")
 }
 
 // AddRolesRoute get roles for given x-auth-token

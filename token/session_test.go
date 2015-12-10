@@ -83,3 +83,17 @@ func TestListoken(t *testing.T) {
 	assert.NotEmpty(t, user, "get test user")
 	assert.Equal(t, "test_user_token", user.UserName, "check user name in object")
 }
+
+// TestTouch create new token
+func TestTouch(t *testing.T) {
+
+	uuid := CreateToken()
+	token[uuid] = types.LoginUser{UserName: "test_user_token"}
+
+	auth := AuthToken{}
+	err := auth.TocuhToken(uuid)
+	assert.NoError(t, err, "should be a vaild user")
+
+	err = auth.TocuhToken("invalid-token")
+	assert.Error(t, err, "Invalid token error expected")
+}

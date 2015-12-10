@@ -41,6 +41,7 @@ func main() {
 	corsHandler := c.Handler(globalMux)
 	responseHandler := api.PreJSONProcessor(corsHandler)
 
+	// Start session invalidation Scheduler
 	api.StartScheduler()
 
 	//start server

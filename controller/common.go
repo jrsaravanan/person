@@ -25,6 +25,7 @@ type (
 		Login(w http.ResponseWriter, r *http.Request)
 		Roles(w http.ResponseWriter, r *http.Request)
 		ListTokens(w http.ResponseWriter, r *http.Request)
+		TouchToken(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -102,6 +103,26 @@ func (h *CommonController) ListTokens(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// TouchToken x-auth-token make it active
+func (h *CommonController) TouchToken(w http.ResponseWriter, r *http.Request) {
+
+	//w.WriteHeader(http.StatusOK)
+	vars := mux.Vars(r)
+	uuid := vars["x-auth-token"]
+	Logger.Debugf("touch token %s", uuid)
+
+	err := h.xauth.TocuhToken(uuid)
+	if err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(uuid); err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+}
+
 //translate error codes on error
 //
 func doErrorTranslation(w http.ResponseWriter, err error) {
@@ -117,7 +138,7 @@ func doErrorTranslation(w http.ResponseWriter, err error) {
 
 }
 
-// InvalidateToken
+// InvalidateToken clear inactive token
 func InvalidateToken() {
 	token.InvalidateTokens()
 }

@@ -14,6 +14,8 @@ REST Web Service provides interface to authentication and authentication. It is 
  - No Power user / admin functionalities avaiable :  super user to manage all other users
  - List / In validate avaialable and it will NOT be exposed 
 
+## Authentication Token Invalidation
+Authentication token will be invalidated 
 
 ## To Build
 ```
@@ -40,7 +42,7 @@ List of supported resources, use with base url
  - v1/auth/ping : ping : GET
  - v1/auth/x : login : POST
  - v1/auth/{x-auth-token}/roles : get roles : GET
- - v1/auth/{x-auth-token} : check is user is active :GET
+ - v1/auth/x/{x-auth-token} : touch user is active :GET
 
  Admin Operations
  > It requies a key  to get your key , reach out development team for key
@@ -163,4 +165,23 @@ Sucess :
 
 Failure
      Status Code: 503 
+```
+
+### Touch v1/auth/x/{x-auth-token}
+touch the token to keep it live
+
+```
+Request 
+http://localhost:9090/v1/auth/x/79aa10c0-6538-4b2c-ac19-dc6e7f00a3fc
+Http Method : GET
+
+Response:
+
+Sucess :
+     Status Code: 200 OK
+    "79aa10c0-6538-4b2c-ac19-dc6e7f00a3fc"
+
+Failure
+     Status Code: 404 Not Found
+     Invalid token 79aa10c0-6538-4b2c-ac19-dc6e7f00a3fcsd
 ```
