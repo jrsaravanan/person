@@ -18,7 +18,9 @@ REST Web Service provides interface to authentication and authentication. It is 
 Authentication token will be invalidated every 30 mins. If there are no activity or touch in the session for 20 mins it will be considered as inactive session.
 
 ## How to integrate Auth API in a application ?
-Here are the steps
+
+Here are the steps:
+
     - Login or authenticate using v1/auth/x 
     - Once you logged in you will be provided with x-auth-token
     - Use x-auth-token as a key 
