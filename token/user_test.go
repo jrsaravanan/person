@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	. "auth/log"
-	"auth/types"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -85,14 +84,15 @@ func TestUpdateNewUser(t *testing.T) {
 	assert.NotEmpty(t, usr, "user is not found")
 }
 
-func TestNoUser(t *testing.T) {
+func TestFindAllRoles(t *testing.T) {
 
 	err := NewDataAccess()
 	defer dbConn.Close()
 	assert.NoError(t, err, "db connection failed")
 
-	auth := AuthToken{}
-	_, err = auth.LoginUser(types.LoginUser{UserName: "testtest", Password: "testtest", Domain: "local"})
-	assert.Error(t, err, "reqired no record expcetion")
-
+	repo := UserRepository{}
+	r, err := repo.FindAllRoles()
+	assert.NoError(t, err, "not able to get roels")
+	Logger.Debug(r)
+	assert.NotEmpty(t, r, "roles missing")
 }

@@ -29,8 +29,8 @@ Here are the steps:
 ## Environment
 | S.NO | ENV  | Endpoint                          | Status              |
 | ---- | ---- |---------------------------------- | ------------------- |
-| 1    | DEV  | http://10.137.2.42:9091/v1/auth   | Down                |
-| 2    | QA   | http://10.137.2.228:9090/v1/auth  | Yet to be deployed  |
+| 1    | DEV  | http://10.137.2.42:9292/v1/auth   | Up                  |
+| 2    | QA   | http://10.137.2.228:9292/v1/auth  | Yet to be deployed  |
 | 3    | PRD  |                                   | Yet to be deployed  |
 
 ## To Build
@@ -46,6 +46,12 @@ go test -coverprofile cover.out
 go tool cover -html=cover.out -o cover.html
 ```
 
+### Run Local
+```
+<your workspace>\src\auth>go run main.go -config=config/auth-config-local.ini
+
+```
+
 
 ### Swagger : Under progress 
 ```
@@ -59,6 +65,7 @@ List of supported resources, use with base url
  - v1/auth/x : login : POST
  - v1/auth/{x-auth-token}/roles : get roles : GET
  - v1/auth/x/{x-auth-token} : touch user is active :GET
+ - v1/auth/roles : get roles : GET
 
  Admin Operations
  > It requies a key  to get your key , reach out development team for key
@@ -229,3 +236,51 @@ Failure
 ```
 
 
+### List roles v1/auth/roles
+Returns List All available roles
+
+```
+Request 
+http://localhost:9090/v1/auth/roles
+Http Method : GET
+
+Response:
+
+Sucess :
+     Status Code: 200 OK
+    [
+    {
+        "Id": 1,
+        "roleName": "GUEST",
+        "createdAt": "2015-07-14 03:19:27"
+    },
+    {
+        "Id": 2,
+        "roleName": "ADMIN",
+        "createdAt": "2015-07-14 03:19:27"
+    },
+    {
+        "Id": 3,
+        "roleName": "AUTOMATION",
+        "createdAt": "2015-07-14 03:19:27"
+    },
+    {
+        "Id": 4,
+        "roleName": "IMPLEMENTATION",
+        "createdAt": "2015-07-14 03:19:27"
+    },
+    {
+        "Id": 5,
+        "roleName": "IMPLEMENTATION LEAD",
+        "createdAt": "2015-07-14 03:19:27"
+    },
+    {
+        "Id": 6,
+        "roleName": "NOC",
+        "createdAt": "2015-07-14 03:19:27"
+    }
+    ]
+
+Failure
+     Status Code: 503 
+```

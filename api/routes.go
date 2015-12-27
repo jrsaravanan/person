@@ -93,22 +93,15 @@ func AddAuthRoute(apiRouter *mux.Router, h controller.ICommonController) {
 // @Title GetRoles
 // @Description returns roles and permission associated with x-auth-token
 // @Accept  json
-// @Success 200 string string
-// @Failure 404 string string
-// @Failure 503 string string
-// @Router /v1/auth/{x-auth-token}/roles [post]
 func AddRolesRoute(apiRouter *mux.Router, h controller.ICommonController) {
 	apiRouter.HandleFunc("/v1/auth/roles", h.AddModifyRoles).Methods("POST")
+	apiRouter.HandleFunc("/v1/auth/roles", h.FindAllRoles).Methods("GET")
 	apiRouter.HandleFunc("/v1/auth/{x-auth-token}/roles", h.Roles).Methods("GET")
 }
 
 // AddListTokenRoute get list of x-auth-token
 // @Title GetTokensList
 // @Description return authentication token list
-// @Accept  json
-// @Success 200 string string
-// @Failure 503 string string
-// @Router /v1/auth/{x-auth-token}/roles [post]
 func AddListTokenRoute(apiRouter *mux.Router, h controller.ICommonController) {
 	apiRouter.HandleFunc("/v1/auth/list", h.ListTokens).Methods("GET")
 }

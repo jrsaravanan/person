@@ -23,10 +23,12 @@ type (
 		InitDB()
 		Ping(w http.ResponseWriter, r *http.Request)
 		Login(w http.ResponseWriter, r *http.Request)
+		//for given x-auth token
 		Roles(w http.ResponseWriter, r *http.Request)
 		ListTokens(w http.ResponseWriter, r *http.Request)
 		TouchToken(w http.ResponseWriter, r *http.Request)
 		AddModifyRoles(w http.ResponseWriter, r *http.Request)
+		FindAllRoles(w http.ResponseWriter, r *http.Request)
 	}
 
 	//CommonController struct
@@ -119,6 +121,21 @@ func (h *CommonController) TouchToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err = json.NewEncoder(w).Encode(uuid); err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+}
+
+// FindAllRoles find all avaialble roles
+func (h *CommonController) FindAllRoles(w http.ResponseWriter, r *http.Request) {
+
+	rls, err := h.xauth.FindAllRoles()
+	if err != nil {
+		doErrorTranslation(w, err)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(rls); err != nil {
 		doErrorTranslation(w, err)
 		return
 	}

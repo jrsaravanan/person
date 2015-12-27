@@ -45,6 +45,7 @@ type (
 		LoginUser(user string, password string) (b bool, err error)
 		UpdateRoles(user string, team string, roleID int) (usr types.User, err error)
 		Roles(user string) (usr *types.User, err error)
+		FindAllRoles() (r []types.Role, err error)
 	}
 
 	//UserRepository empty struct
@@ -220,5 +221,14 @@ func (u *UserRepository) UpdateRoles(user string, team string, roleID int) (s ty
 	tx.Commit()
 
 	Logger.Debugf("Roles added for the user %s ", user)
+	return
+}
+
+//FindAllRoles paginated subnet list
+func (u *UserRepository) FindAllRoles() (r []types.Role, err error) {
+
+	r = []types.Role{}
+	err = dbConn.Find(&r).Error
+	//r = &types.Role{Lst: list}
 	return
 }
