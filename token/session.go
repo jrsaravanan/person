@@ -28,6 +28,7 @@ type (
 		InitDB() (err error)
 		TouchToken(xauth string) (err error)
 		UpdateRoles(u types.User) (usr *types.User, err error)
+		FindAllRoles() (t *[]types.Role, err error)
 	}
 
 	//AuthToken token
@@ -177,4 +178,11 @@ func (a *AuthToken) UpdateRoles(u types.User) (r *types.User, err error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+// FindAllRoles Find all the roles
+// return valid roles
+func (a *AuthToken) FindAllRoles() (r []types.Role, err error) {
+	r, err = a.repo.FindAllRoles()
+	return
 }

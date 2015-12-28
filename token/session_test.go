@@ -115,3 +115,29 @@ func TestUpdateRoles(t *testing.T) {
 	assert.NotEmpty(t, r, "returns valid roles")
 
 }
+
+func TestNoUser(t *testing.T) {
+
+	err := NewDataAccess()
+	defer dbConn.Close()
+	assert.NoError(t, err, "db connection failed")
+
+	auth := AuthToken{}
+	_, err = auth.LoginUser(types.LoginUser{UserName: "testtest", Password: "testtest", Domain: "local"})
+	assert.Error(t, err, "reqired no record expcetion")
+
+}
+
+func TestFidAllRoles(t *testing.T) {
+
+	err := NewDataAccess()
+	defer dbConn.Close()
+	assert.NoError(t, err, "db connection failed")
+
+	auth := AuthToken{}
+	r, err := auth.FindAllRoles()
+	assert.NoError(t, err, "reqired no record expcetion")
+	Logger.Debugf("roles %+v", r)
+	assert.NotEmpty(t, r, "no valid roles")
+
+}

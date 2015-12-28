@@ -30,15 +30,15 @@ type (
 		ID         int      `sql:"AUTO_INCREMENT" gorm:"column:role_id;primary_key" json:"Id,omitempty"`
 		RoleName   string   `gorm:"column:role_name" json:"roleName,omitempty"`
 		CreateAt   string   `gorm:"column:created_at" json:"createdAt,omitempty"`
-		Permission []string `json:"permission,omitempty"`
+		Permission []string `sql:"-" json:"permission,omitempty"`
 	}
 
 	// UserRole mapping table
 	UserRole struct {
 		UserRoleID int    `sql:"AUTO_INCREMENT" gorm:"column:user_role_id;primary_key" json:"userRoleId,omitempty"`
-		UserID     int    `gorm:"column:user_id;primary_key" json:"userRoleId,omitempty"`
-		RoleID     int    `gorm:"column:role_id;primary_key" json:"userRoleId,omitempty"`
-		CreatedBy  string `gorm:"column:created_by;primary_key" json:"userRoleId,omitempty"`
+		UserID     int    `gorm:"column:user_id;primary_key" json:"userId,omitempty"`
+		RoleID     int    `gorm:"column:role_id;primary_key" json:"roleId,omitempty"`
+		CreatedBy  string `gorm:"column:created_by;primary_key" json:"createdBy,omitempty"`
 		//UpdateBy
 		//UpdateAt
 	}
