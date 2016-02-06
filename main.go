@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"auth/api"
-	. "auth/log"
+	"person/api"
+	. "person/log"
 
 	"github.com/gorilla/context"
 	"github.com/rs/cors"
@@ -27,7 +27,7 @@ func main() {
 	iniflags.Parse()
 
 	globalMux.Handle("/", api.BuildAPIRouter())
-	globalMux.Handle("/v1/auth/", api.BuildAuthRouter())
+	globalMux.Handle("/v1/person/", api.BuildAuthRouter())
 	Logger.Info("Authentication Server listening on port - ", httpPort)
 
 	//to handle CORS support
@@ -40,9 +40,6 @@ func main() {
 	})
 	corsHandler := c.Handler(globalMux)
 	responseHandler := api.PreJSONProcessor(corsHandler)
-
-	// Start session invalidation Scheduler
-	api.StartScheduler()
 
 	//start server
 	s := &http.Server{

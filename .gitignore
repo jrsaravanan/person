@@ -1,4 +1,3 @@
-security.log
-log/security.log
-controller/security.log
-token/security.log
+person-application.log
+log/person-application.log
+controller/person-application.log

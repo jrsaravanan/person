@@ -3,9 +3,8 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
+	"person/api"
 	"testing"
-
-	"auth/api"
 
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/mock"
@@ -22,23 +21,9 @@ type MockHandler struct {
 	mock.Mock
 }
 
-func (m *MockHandler) Ping(w http.ResponseWriter, r *http.Request) {
-}
+func (m *MockHandler) Ping(w http.ResponseWriter, r *http.Request) {}
 
-func (m *MockHandler) InitDB() {
-}
-
-func (m *MockHandler) ListTokens(w http.ResponseWriter, r *http.Request) {
-}
-
-func (m *MockHandler) Login(w http.ResponseWriter, r *http.Request) {
-}
-
-func (m *MockHandler) Roles(w http.ResponseWriter, r *http.Request) {
-}
-
-func (m *MockHandler) TouchToken(w http.ResponseWriter, r *http.Request) {
-}
+func (m *MockHandler) InitDB() {}
 
 func init() {
 	mu = mux.NewRouter()
@@ -48,9 +33,9 @@ func init() {
 
 func TestPing(t *testing.T) {
 
-	req, err = http.NewRequest("GET", "/v1/auth/ping", nil)
+	req, err = http.NewRequest("GET", "/v1/person/ping", nil)
 	if err != nil {
-		t.Fatal("GET /v1/auth/ping ", err.Error())
+		t.Fatal("GET /v1/person/ping ", err.Error())
 	}
 
 	mu.ServeHTTP(respRec, req)

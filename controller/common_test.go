@@ -11,9 +11,9 @@ import (
 
 func TestPing(t *testing.T) {
 
-	r, err := http.NewRequest("GET", "/v1/auth/ping", nil)
+	r, err := http.NewRequest("GET", "/v1/person/ping", nil)
 	if err != nil {
-		t.Fatal("GET /v1/auth/ping", err.Error())
+		t.Fatal("GET /v1/person/ping", err.Error())
 	}
 
 	c := new(CommonController)

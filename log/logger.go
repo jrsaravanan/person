@@ -28,7 +28,7 @@ func init() {
 
 	Logger.Formatter = new(logrus.JSONFormatter)
 	flag.StringVar(&level, "level", "debug", "application log level")
-	flag.StringVar(&location, "location", "security.log", "application log path and name")
+	flag.StringVar(&location, "location", "person-application.log", "application log path and name")
 
 	InitLog()
 }
@@ -38,7 +38,7 @@ func InitLog() {
 	f, err := os.OpenFile(location, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
 	if err != nil {
 		fmt.Printf("error opening file: %v , swithing to to default file iris.log", err.Error())
-		f, err = os.OpenFile("security.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		f, err = os.OpenFile("person-application.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
 			fmt.Printf("error opening file: %v ", err.Error())
 		}
