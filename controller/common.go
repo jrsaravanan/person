@@ -14,7 +14,7 @@ type (
 	//ICommonController common interface
 	//list of common functions
 	ICommonController interface {
-		//InitDB()
+		InitDB()
 		Ping(w http.ResponseWriter, r *http.Request)
 	}
 
