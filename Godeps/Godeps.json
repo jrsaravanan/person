@@ -1,0 +1,57 @@
+{
+	"ImportPath": "person-go/person-go",
+	"GoVersion": "go1.5.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.3-3-g07d998d",
+			"Rev": "07d998d174c4e2dc90e2f1989a20724220bca1ff"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "9cb89f07ca03c6a28d1e237ba033bc6a29422fd6"
+		},
+		{
+			"ImportPath": "github.com/rs/cors",
+			"Rev": "f49dcfbc084f3bd044c50572731027c77043de7f"
+		},
+		{
+			"ImportPath": "github.com/stretchr/objx",
+			"Rev": "cbeaeb16a013161a98496fad62933b1d21786672"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Comment": "v1.0-21-gf552045",
+			"Rev": "f5520455607c0233cb6d7b056f71b22c1d265ef1"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/mock",
+			"Comment": "v1.0-21-gf552045",
+			"Rev": "f5520455607c0233cb6d7b056f71b22c1d265ef1"
+		},
+		{
+			"ImportPath": "github.com/vharitonsky/iniflags",
+			"Comment": "v.1.0-22-g5f0bb03",
+			"Rev": "5f0bb0369da23c35ce1201e53783d957df85c23b"
+		},
+		{
+			"ImportPath": "person/api",
+			"Comment": "release-6-4-g7305455",
+			"Rev": "730545551821d61398cb843ebeb91a2c41f416a1"
+		},
+		{
+			"ImportPath": "person/controller",
+			"Comment": "release-6-4-g7305455",
+			"Rev": "730545551821d61398cb843ebeb91a2c41f416a1"
+		},
+		{
+			"ImportPath": "person/log",
+			"Comment": "release-6-4-g7305455",
+			"Rev": "730545551821d61398cb843ebeb91a2c41f416a1"
+		}
+	]
+}
