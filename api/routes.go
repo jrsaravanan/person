@@ -1,8 +1,5 @@
 //Package api list of APIS
-// @APIVersion 1.0.0
-// @APITitle Auth API
-// @APIDescription Authentication and autherization API
-// @Contact saravanan.renganathan@ril.com
+// @Contact saravanan.renganathan@gmail.com
 // @BasePath http://127.0.0.1
 package api
 
