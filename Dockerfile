@@ -11,7 +11,7 @@ RUN godep go install root/workarea/src/person
 
 # Run the outyet command by default when the container starts.
 # Need to changes it to docker ENV
-ENTRYPOINT root/workarea/bin/person -config=/root/workarea/src/person/config/auth-config-dev.ini
+ENTRYPOINT root/workarea/bin/person 
 
 # Document that the service listens on port 9292.
 EXPOSE 9292
