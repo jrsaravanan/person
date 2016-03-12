@@ -26,7 +26,6 @@ func main() {
 	//Init data access
 	iniflags.Parse()
 
-	globalMux.Handle("/", api.BuildAPIRouter())
 	globalMux.Handle("/v1/person/", api.BuildAuthRouter())
 	Logger.Info("Authentication Server listening on port - ", httpPort)
 

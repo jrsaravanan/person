@@ -23,15 +23,7 @@ func BuildAuthRouter() *mux.Router {
 	return apiRouter
 }
 
-//BuildAPIRouter building all routes
-func BuildAPIRouter() *mux.Router {
-
-	//init routers and controllers
-	apiRouter := mux.NewRouter()
-	apiRouter.Headers("Content-Type", "text/html")
-	apiRouter.PathPrefix("/swagger-ui/").Handler(http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir("./swagger-ui/"))))
-	return apiRouter
-}
+ 
 
 // PreJSONProcessor add http header for all response
 // intercept every request
